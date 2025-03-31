@@ -14,13 +14,6 @@
         <p>Del dine yndlingsopskrifter og find inspiration til nye retter!</p>
     </header>
 
-    <main>
-        <section id="opskrift-liste">
-            <h2>Opskrifter</h2>
-            <div id="opskrifter"></div>
-        </section>
-    </main>
-
     <form id="opskriftForm">
         <h2>Tilføj en ny opskrift</h2>
 
@@ -33,9 +26,43 @@
         <label for="fremgangsmade">Fremgangsmåde:</label>
         <textarea id="fremgangsmade" name="fremgangsmade" required></textarea>
 
+        <label for="kategori">Kategori:</label>
+        <select id="kategori" name="kategori">
+            <option value="Middag">Middag</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Forret">Forret</option>
+        </select>
+
+
+
+        <select id="filterKategori">
+            <option value="Alle">Alle</option>
+            <option value="Middag">Middag</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Forret">Forret</option>
+        </select>
+
         <button type="submit">Tilføj Opskrift</button>
 
+        <input type="text" id="søgning" placeholder="Søg opskrifter...">
     </form>
+
+    <main>
+        <section id="opskrift-liste">
+            <h2>Opskrifter</h2>
+            <div id="opskrifter"></div>
+        </section>
+    </main>
+
+    <div class="comments-section">
+        <textarea id="commentInput" placeholder="Skriv en kommentar..."></textarea>
+        <button class="comment-btn" data-index="${index}">Kommenter</button>
+        <ul class="comments-list" id="comments-${index}">
+            <!-- Kommentarer vises her -->
+        </ul>
+    </div>
+
+
 
     <script src="script.js"></script>
 </body>

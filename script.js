@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const opskriftForm = document.getElementById("opskriftForm");
     const opskrifterContainer = document.getElementById("opskrifter");
+    const kategori = document.getElementById("kategori").value;
+    const nyOpskrift = { titel, ingredienser, fremgangsmade, kategori };
     let editingIndex = null;
 
     function loadOpskrifter() {
@@ -23,12 +25,43 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>${opskrift.ingredienser.replace(/\n/g, "<br>")}</p>
             <p><strong>Fremgangsmåde:</strong></p>
             <p>${opskrift.fremgangsmade.replace(/\n/g, "<br>")}</p>
+            <p><strong>Kategori:</strong> ${opskrift.kategori}</p>
             <button class="edit-btn" data-index="${index}">Rediger</button>
             <button class="delete-btn" data-index="${index}">Slet</button>
+
+            <div class="comments-section">
+               <textarea id="commentInput-${index}" placeholder="Skriv en kommentar..."></textarea>
+               <button class="comment-btn" data-index="${index}">Kommenter</button>
+               <ul class="comments-list" id="comments-${index}">
+                ${opskrift.comments ? opskrift.comments.map(comment => `<li>${comment}</li>`).join('') : ''}
+              </ul>
+         </div>
+
         `;
 
         opskrifterContainer.appendChild(opskriftKort);
     }
+
+    // Filtrering:
+    function filtrereOpskrifter(kategori) {
+        const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
+        return savedOpskrifter.filter(opskrift => opskrift.kategori === kategori);
+    }
+
+    document.getElementById("søgning").addEventListener("input", function () {
+        const søgeord = this.value.toLowerCase();
+        const opskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
+        const resultater = opskrifter.filter(opskrift => {
+            return opskrift.titel.toLowerCase().includes(søgeord) ||
+                opskrift.ingredienser.toLowerCase().includes(søgeord) ||
+                opskrift.fremgangsmade.toLowerCase().includes(søgeord);
+        });
+        opskrifterContainer.innerHTML = "";
+        resultater.forEach(opskrift => addOpskriftToDOM(opskrift));
+
+        return filtrereOpskrifter;
+    });
+
 
     opskriftForm.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -51,6 +84,28 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOpskrifter(savedOpskrifter);
             opskriftForm.reset();
             loadOpskrifter();
+        }
+        return nyOpskrift;
+    });
+
+    // Tilføj kommentar til opskrift
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("comment-btn")) {
+            const index = event.target.dataset.index;
+            const commentInput = document.getElementById(`commentInput-${index}`);
+            const commentText = commentInput.value;
+
+            if (commentText) {
+                const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
+                if (!savedOpskrifter[index].comments) {
+                    savedOpskrifter[index].comments = [];
+                }
+                savedOpskrifter[index].comments.push(commentText);
+                localStorage.setItem("opskrifter", JSON.stringify(savedOpskrifter));
+
+                // Opdater kommentarerne
+                updateComments(savedOpskrifter[index].comments, index);
+            }
         }
     });
 
