@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #D2691E;
+}
+
+header {
+    background-color: #6495ED;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #6495ED;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1,
+h2 {
+    margin-bottom: 10px;
+    color: #FFD700;
+
+
+}
+
+p {
+    font-size: 1.1em;
+    color: black;
+}
+
+#opskrifter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.opskrift-kort {
+    background-color: #A52A2A;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.opskrift-kort h3 {
+    margin-top: 0;
+    color: #FFD700;
+}
+
+.opskrift-kort p {
+    font-size: 0.9em;
+    color: black;
+}
