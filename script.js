@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const opskrifterContainer = document.getElementById("opskrifter");
     const kategori = document.getElementById("kategori").value;
     const nyOpskrift = { titel, ingredienser, fremgangsmade, kategori };
-    let editingIndex = null;
+    let editingIndex = null; // Holder styr på hvilken opskrift der redigeres
 
     function loadOpskrifter() {
         const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
@@ -62,6 +62,21 @@ document.addEventListener("DOMContentLoaded", function () {
         return filtrereOpskrifter;
     });
 
+    document.getElementById("filterKategori").addEventListener("change", function () {
+        const valgtKategori = this.value;
+        loadOpskrifter(valgtKategori);
+    });
+
+    function loadOpskrifter(filterKategori = "") {
+        const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
+        opskrifterContainer.innerHTML = "";
+
+        savedOpskrifter.forEach((opskrift, index) => {
+            if (filterKategori === "" || opskrift.kategori === filterKategori) {
+                addOpskriftToDOM(opskrift, index);
+            }
+        });
+    }
 
     opskriftForm.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -131,7 +146,10 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("titel").value = opskrift.titel;
             document.getElementById("ingredienser").value = opskrift.ingredienser;
             document.getElementById("fremgangsmade").value = opskrift.fremgangsmade;
-            editingIndex = index;
+            document.getElementById("kategori").value = opskrift.kategori;
+
+            editingIndex = index; // Gem indeks for redigering
+            document.getElementById("submitBtn").textContent = "Gem ændringer"; // Opdater knaptekst
         }
     });
 
