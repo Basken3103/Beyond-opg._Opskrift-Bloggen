@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>${opskrift.ingredienser.replace(/\n/g, "<br>")}</p>
             <p><strong>Fremgangsmåde:</strong></p>
             <p>${opskrift.fremgangsmade.replace(/\n/g, "<br>")}</p>
-            <p><strong>Kategori:</strong> ${opskrift.kategori}</p>
+            <p><strong>Kategori:</strong> ${opskrift.kategori || "Ikke angivet"}</p>
             <button class="edit-btn" data-index="${index}">Rediger</button>
             <button class="delete-btn" data-index="${index}">Slet</button>
 
@@ -69,24 +69,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const titel = document.getElementById("titel").value;
         const ingredienser = document.getElementById("ingredienser").value;
         const fremgangsmade = document.getElementById("fremgangsmade").value;
+        const kategori = document.getElementById("kategori").value; // Henter kategori
 
-        if (titel && ingredienser && fremgangsmade) {
+        if (titel && ingredienser && fremgangsmade && kategori) {
+            const newOpskrift = { titel, ingredienser, fremgangsmade, kategori };
             const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
-            if (editingIndex !== null) {
-                // Opdater eksisterende opskrift
-                savedOpskrifter[editingIndex] = { titel, ingredienser, fremgangsmade };
-                editingIndex = null;
-            } else {
-                // Tilføj ny opskrift
-                savedOpskrifter.push({ titel, ingredienser, fremgangsmade });
-            }
+            savedOpskrifter.push(newOpskrift);
+            localStorage.setItem("opskrifter", JSON.stringify(savedOpskrifter));
 
-            saveOpskrifter(savedOpskrifter);
             opskriftForm.reset();
             loadOpskrifter();
         }
-        return nyOpskrift;
     });
+
 
     // Tilføj kommentar til opskrift
     document.addEventListener("click", function (event) {
@@ -94,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const index = event.target.dataset.index;
             const commentInput = document.getElementById(`commentInput-${index}`);
             const commentText = commentInput.value;
+            const kat = document.getElementById("kategori").value
 
             if (commentText) {
                 const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];
@@ -108,6 +104,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     });
+
+    // Funktion der opdatere kommentarene
+    function updateComments(comments, index) {
+        const commentsList = document.getElementById(`comments-${index}`);
+        if (commentsList) {
+            commentsList.innerHTML = comments.map(comment => `<li>${comment}</li>`).join('');
+        }
+    }
+
 
     opskrifterContainer.addEventListener("click", function (event) {
         const savedOpskrifter = JSON.parse(localStorage.getItem("opskrifter")) || [];

@@ -27,16 +27,13 @@
         <textarea id="fremgangsmade" name="fremgangsmade" required></textarea>
 
         <label for="kategori">Kategori:</label>
-        <select id="kategori" name="kategori">
+        <select id="kategori" name="kategori" id="kategori">
             <option value="Middag">Middag</option>
+            <option value="Aften">Aften</option>
             <option value="Dessert">Dessert</option>
-            <option value="Forret">Forret</option>
         </select>
 
-
-
         <select id="filterKategori">
-            <option value="Alle">Alle</option>
             <option value="Middag">Middag</option>
             <option value="Dessert">Dessert</option>
             <option value="Forret">Forret</option>
@@ -53,15 +50,6 @@
             <div id="opskrifter"></div>
         </section>
     </main>
-
-    <div class="comments-section">
-        <textarea id="commentInput" placeholder="Skriv en kommentar..."></textarea>
-        <button class="comment-btn" data-index="${index}">Kommenter</button>
-        <ul class="comments-list" id="comments-${index}">
-            <!-- Kommentarer vises her -->
-        </ul>
-    </div>
-
 
 
     <script src="script.js"></script>
